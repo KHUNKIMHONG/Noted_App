@@ -24,19 +24,6 @@
         placeholder="Enter your Email"/>
     </div>
 
-    <!-- Phone Number -->
-    <div class="flex flex-col">
-      <label for="phoneNumber" class="text-gray-700 font-medium mb-1">Phone Number</label>
-      <input 
-        v-model="phoneNumber" 
-        type="text" 
-        id="phoneNumber" 
-        class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500 outline-none" 
-        required
-        placeholder="Enter your phone number"
-      />
-    </div>
-
     <!-- Password -->
     <div class="flex flex-col">
       <label for="password" class="text-gray-700 font-medium mb-1">Password</label>
@@ -73,14 +60,13 @@
 </template>
 
 <script>
-import api from "../services/api.ts"; // Import API service
+import api from "../../services/api"; 
 
 export default {
   data() {
     return {
       name: "",
       email: "",
-      phoneNumber: "", 
       password: "",
       confirmPassword: "",
     };
@@ -93,10 +79,6 @@ export default {
       const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       return !emailPattern.test(this.email);
     },
-    phoneNumberInvalid() {
-      const phonePattern = /^[0-9]{10}$/; // Ensures a 10-digit phone number
-      return !phonePattern.test(this.phoneNumber);
-    }
   },
   methods: {
     async register() {
@@ -117,8 +99,8 @@ export default {
         alert("Registration successful! 🎉");
         console.log(response.data); 
 
-        // Optionally redirect after successful registration
-        // this.$router.push("/login");
+        //Optionally redirect after successful registration
+        this.$router.push("/login");
 
       } catch (error) {
         console.error("Registration failed:", error);

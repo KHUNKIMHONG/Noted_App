@@ -1,17 +1,18 @@
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from "axios";
 
-// Load environment variable
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// Base API URL
+const BASE_URL = "https://localhost:7131/api";
 
+// Create Axios instance
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Ensure cookies/token work
+  withCredentials: true, // Ensures cookies/token authentication works
 });
 
-// Add Authorization Header if token exists
+// Request Interceptor: Attach Authorization Token
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem("token");
@@ -20,24 +21,22 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error) // Handle request errors
 );
 
-// Handle errors globally (e.g., token expiration)
+// Response Interceptor: Handle Unauthorized (401) Errors
 api.interceptors.response.use(
-  (response) => response, // Pass successful responses through
+  (response) => response, // Return successful responses
   (error) => {
     if (error.response?.status === 401) {
-      // Unauthorized, e.g., token expired or invalid
-      localStorage.removeItem("token"); // Remove invalid token
-      // Optionally, log out the user or redirect to login page
-      window.location.href = "/login"; // Redirect to login page
+      // If unauthorized, remove token and redirect to login
+      localStorage.removeItem("token");
+      window.location.href = "/login"; 
     }
-    return Promise.reject(error);
+    return Promise.reject(error); // Forward other errors
   }
 );
 
 export default api;
+
 

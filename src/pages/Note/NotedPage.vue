@@ -1,7 +1,21 @@
 <template>
-    <div class="home">
-      <h1 class="text-blue-600">Welcome to Notes App</h1>
-    </div>
-  </template>
-  
-  <script></script>
+  <div>
+      <Navbar />
+      <Notes class="pt-32" />
+  </div>
+</template>
+
+<script>
+import Navbar from "@/components/Navbar/Navbar.vue";
+import Notes from "../../components/Noted/Notes.vue";
+
+export default {
+  components: {
+    Navbar,
+    Notes
+  }
+};
+</script>
+
+
+

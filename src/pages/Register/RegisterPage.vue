@@ -12,7 +12,7 @@
 
       <RegisterForm />
 
-      <p class="text-center selection:mt-4 text-gray-600 text-sm">
+      <p class="text-center mt-4 text-gray-600 text-sm">
         Already have an account?
         <router-link
           to="/login"
@@ -26,5 +26,5 @@
 </template>
 
 <script setup>
-import RegisterForm from "@/components/RegisterForm.vue";
+import RegisterForm from "@/components/Auth/RegisterForm.vue";
 </script>

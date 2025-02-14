@@ -8,6 +8,7 @@
         v-model="email"
         class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 outline-none"
         required
+        placeholder="Enter your Email"
       />
     </div>
 
@@ -19,6 +20,7 @@
         v-model="password"
         class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 outline-none"
         required
+        placeholder="Enter your Password"
       />
     </div>
 
@@ -52,7 +54,8 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useAuthStore } from "@/stores/auth"; // Ensure correct path
+import { useAuthStore } from "../../stores/auth";
+import router from "../../router";
 
 // Initialize authentication store
 const authStore = useAuthStore();
@@ -69,15 +72,22 @@ const submitForm = async () => {
   loading.value = true; // Show loading state
 
   try {
+    // Perform login action using the store
     await authStore.login(email.value, password.value);
-    alert("Login successful!");
-    window.location.href = "/notes"; // Redirect to dashboard after login
+
+    // Redirect to /notes page after successful login
+      // Redirect to /notes page after successful login
+    router.push("/notes");
+
   } catch (error: any) {
+    // Handle the error by setting the error message
     errorMessage.value = error.message || "Login failed, please try again.";
   } finally {
+    // Hide loading state regardless of success or failure
     loading.value = false;
   }
 };
 </script>
+
 
 

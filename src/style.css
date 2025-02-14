@@ -2,3 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* Define Kanit font */
+@font-face {
+    font-family: 'Merienda';
+    src: url('@/assets/fonts/Merienda/static/Merienda-Blod.ttf') format('ttf'),
+         url('@/assets/fonts/Merienda/static/Merienda-Light.ttf') format('ttf'),
+         url('@/assets/fonts/Merienda/static/Merienda-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+/* Apply globally */
+body {
+    font-family: 'Merienda', sans-serif;
+}  
