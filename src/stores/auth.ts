@@ -4,21 +4,22 @@ import { jwtDecode } from "jwt-decode";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user: null as any | null,
+    user: JSON.parse(localStorage.getItem("user") || "null") as any | null,
     token: localStorage.getItem("token") || null,
   }),
+
   getters: {
-    isAuthenticated: (state) => !!state.token, // Check if user is logged in
+    isAuthenticated: (state) => !!state.token,
   },
+
   actions: {
     async login(email: string, password: string) {
       try {
         const response = await api.post("/UserAuth/login", { email, password });
 
-        // Ensure the token is always a string
-        this.token = response.data.token || ""; // Fallback to empty string if null
+        this.token = response.data.token || "";
+        localStorage.setItem("token", this.token?? "");
 
-        localStorage.setItem("token", this.token ?? "");
         await this.fetchUser();
 
         return response.data;
@@ -30,27 +31,21 @@ export const useAuthStore = defineStore("auth", {
 
     async fetchUser() {
       try {
-        if (!this.token) {
-          throw new Error("Token not found");
-        }
+        if (!this.token) throw new Error("Token not found");
 
-        // Decode the token to get the user ID using jwt-decode
         const decodedToken: any = jwtDecode(this.token);
-        console.log(decodedToken); // Debug to see token contents
+        const userId = decodedToken.id || decodedToken.sub;
 
-        const userId = decodedToken.id || decodedToken.sub; // Use 'sub' if 'id' is missing
-
-        if (!userId) {
-          throw new Error("User ID not found in token");
-        }
+        if (!userId) throw new Error("User ID not found in token");
 
         const response = await api.get(`/UserAuth/getUser/${userId}`);
-        this.user = response.data.user; // Assuming the user object is inside 'data.user'
-        
+        this.user = response.data.user;
+
+        localStorage.setItem("user", JSON.stringify(this.user));
       } catch (error) {
         console.error("Failed to fetch user:", error);
-        this.logout(); // Logout if fetching fails (e.g., invalid token)
-        throw error; // Optional: rethrow the error to handle it elsewhere in the app
+        this.logout();
+        throw error;
       }
     },
 
@@ -58,6 +53,17 @@ export const useAuthStore = defineStore("auth", {
       this.token = null;
       this.user = null;
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    },
+
+    initializeAuth() {
+      const storedToken = localStorage.getItem("token");
+
+      if (storedToken) {
+        this.token = storedToken;
+        this.fetchUser().catch(() => this.logout());
+      }
     },
   },
 });
+

@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
-import api from '../services/api.ts';
+import { defineStore } from "pinia";
+import api from "../services/api.ts";
 
 // Define the Note type for better type safety
 interface Note {
@@ -10,55 +10,67 @@ interface Note {
   updatedAt: string;
 }
 
-export const useNotesStore = defineStore('notes', {
+export const useNotesStore = defineStore("notes", {
   state: () => ({
-    notes: [] as Note[],  // Use the Note type here
+    notes: [] as Note[], // Use the Note type here
   }),
+
   actions: {
-    // Fetch all notes and handle errors
+    // Fetch all notes
     async fetchNotes() {
       try {
-        const { data } = await api.get('/notes');
+        const { data } = await api.get("/Notes/all_Notes");
         this.notes = data;
       } catch (error) {
-        console.error('Error fetching notes:', error);
+        console.error("Error fetching notes:", error);
       }
     },
 
     // Create a new note
-    async createNote(note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) {
+    async createNote(note: Omit<Note, "id" | "createdAt" | "updatedAt">) {
       try {
-        const { data } = await api.post('/notes', note);
-        this.notes.push(data); // Add new note to the notes array
-      } catch (error) {
-        console.error('Error creating note:', error);
+        const { data } = await api.post("/Notes/create", note);
+
+        if (data && data.noteId) {
+          this.notes.push({
+            ...note,
+            id: data.noteId,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+        } else {
+          console.error("Unexpected API response:", data);
+        }
+      } catch (error: any) {
+        console.error(
+          "Error creating note:",
+          error.response?.data || error.message
+        );
       }
     },
-
-    // Update an existing note
     async updateNote(id: number, note: { title: string; content: string }) {
       try {
+        console.log("Updating note with ID:", id, "Data:", note); // Debugging
+    
         const { data } = await api.put(`/notes/${id}`, note);
-        
-        // Find the note and update it in the array instead of refetching all notes
+    
         const index = this.notes.findIndex((n) => n.id === id);
         if (index !== -1) {
           this.notes[index] = { ...this.notes[index], ...data };
         }
       } catch (error) {
-        console.error('Error updating note:', error);
+        console.error("Error updating note:", error);
       }
-    },
-
+    },    
+    
     // Delete a note
     async deleteNote(id: number) {
       try {
         await api.delete(`/notes/${id}`);
         this.notes = this.notes.filter((note) => note.id !== id); // Remove the note from the state
       } catch (error) {
-        console.error('Error deleting note:', error);
+        console.error("Error deleting note:", error);
       }
     },
   },
 });
-

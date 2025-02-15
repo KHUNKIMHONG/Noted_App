@@ -1,13 +1,14 @@
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from "axios";
 
 // Base API URL
-const BASE_URL = "https://localhost:7131/api";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Create Axios instance
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Content-Type": "application/json"
   },
   withCredentials: true, // Ensures cookies/token authentication works
 });

@@ -1,5 +1,5 @@
 <template>
-    <nav class="bg-gradient-to-r from-blue-700 via-teal-500 to-blue-700 text-white p-4 fixed w-full top-0">
+    <nav class="bg-gradient-to-r from-blue-700 via-teal-500 to-blue-700 text-white p-4 fixed w-full top-0 z-10">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-xl font-bold hover:text-blue-400">Noted Application</h1>
 

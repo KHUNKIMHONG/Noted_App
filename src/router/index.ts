@@ -3,7 +3,6 @@ import { useAuthStore } from '../stores/auth.ts'; // Ensure this store exists
 
 // Import Pages
 import HomePage from '../pages/Home/HomePage.vue';
-import BoxPage from '../pages/Home/Box.vue';
 import LoginPage from '../pages/Login/LoginPage.vue';
 import RegisterPage from '../pages/Register/RegisterPage.vue';
 import NotesView from '../pages/Note/NotedPage.vue';
@@ -11,7 +10,6 @@ import NotesView from '../pages/Note/NotedPage.vue';
 // Define Routes
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
-  { path: '/box', name: 'Box', component: BoxPage },
   { path: '/login', name: 'Login', component: LoginPage },
   { path: '/register', name: 'Register', component: RegisterPage },
   { 
