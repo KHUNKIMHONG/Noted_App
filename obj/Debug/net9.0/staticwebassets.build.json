@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "00FKt0YsztVcTWOWDcUC55X9KySS9tTM94Y9Jai4QEY=",
+  "Source": "API_BackEnd",
+  "BasePath": "_content/API_BackEnd",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
