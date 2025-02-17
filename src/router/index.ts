@@ -1,23 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores/auth.ts'; // Ensure this store exists
 
-// Import Pages
-import HomePage from '../pages/Home/HomePage.vue';
-import LoginPage from '../pages/Login/LoginPage.vue';
-import RegisterPage from '../pages/Register/RegisterPage.vue';
-import NotesView from '../pages/Note/NotedPage.vue';
-
 // Define Routes
 const routes = [
-  { path: '/', name: 'Home', component: HomePage },
-  { path: '/login', name: 'Login', component: LoginPage },
-  { path: '/register', name: 'Register', component: RegisterPage },
+  { path: '/', name: 'Home', component: () => import('@/pages/Home/HomePage.vue') },
+  { path: '/login', name: 'Login', component: () => import('@/pages/Login/LoginPage.vue') },
+  { path: '/register', name: 'Register', component: () => import('@/pages/Register/RegisterPage.vue') },
   { 
     path: '/notes', 
     name: 'Notes', 
-    component: NotesView, 
+    component: () => import('@/pages/Note/NotedPage.vue'), 
     meta: { requiresAuth: true } // Protect this route
-  }
+  },
+  { path: '/:pathMatch(.*)*', component: () => import('@/pages/Error/ErrorPage.vue') },
 ];
 
 // Create Router
